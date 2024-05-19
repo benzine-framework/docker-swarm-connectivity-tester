@@ -54,4 +54,3 @@ jobs:
           build-contexts: |
             php:cli=docker-image://ghcr.io/benzine-framework/php:cli-${{ env.PHP_VERSION }}
             php:nginx=docker-image://ghcr.io/benzine-framework/php:nginx-${{ env.PHP_VERSION }}
-
