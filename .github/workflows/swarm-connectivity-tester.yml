@@ -1,4 +1,4 @@
-name: Build Swarm Connectivity Tester
+name: Build ConnTest
 
 permissions:
   contents: read
@@ -21,10 +21,11 @@ env:
   PLATFORMS: linux/amd64,linux/arm64
 
 jobs:
-  swarm-connectivity-tester-build:
-    name: Build Swarm Connectivity Tester
+  build-container:
+    name: Build Container
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         component:
           - target

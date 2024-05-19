@@ -1,1 +1,1 @@
-# docker-swarm-connectivity-tester
+# Docker Swarm Connectivity Tester
