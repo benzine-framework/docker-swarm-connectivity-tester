@@ -1,0 +1,28 @@
+name: "Cleanup"
+
+permissions:
+  contents: read
+  packages: write
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Build Swarm Connectivity Tester"]
+    types:
+      - completed
+
+jobs:
+  cleanup:
+    name: Delete untagged images
+    runs-on: ubuntu-latest
+    steps:
+      - run: docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
+      - uses: vlaurin/action-ghcr-prune@v0.6.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          organization: ${{ github.repository_owner }}
+          container: swarm-connectivity-tester
+          dry-run: true
+          keep-younger-than: 7 # days
+          keep-last: 2
+          prune-untagged: true

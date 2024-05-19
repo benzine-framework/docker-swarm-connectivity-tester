@@ -24,6 +24,11 @@ jobs:
   swarm-connectivity-tester-build:
     name: Build Swarm Connectivity Tester
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component:
+          - target
+          - reporter
     steps:
       - uses: benzine-framework/action-setup-php@main
       - uses: benzine-framework/action-get-datetime@main
@@ -31,37 +36,21 @@ jobs:
         with:
           ghcr_user: matthewbaggett
           ghcr_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Build: Build & Push Target Image"
-        uses: docker/build-push-action@v5
+          docker_hub_user: matthewbaggett
+          docker_hub_token: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - uses: docker/build-push-action@v5
         with:
           context: .
-          target: connect-target
+          target: connect-${{ matrix.component }}
           platforms: ${{ github.actor != 'nektos/act' && env.PLATFORMS || 'linux/amd64' }}
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: |
-            benzine/swarm-connectivity-tester:target
-            ghcr.io/benzine-framework/swarm-connectivity-tester:target
+            benzine/swarm-connectivity-tester:${{ matrix.component }}
+            ghcr.io/benzine-framework/swarm-connectivity-tester:${{ matrix.component }}
           cache-from: ${{ env.DOCKER_CACHE_FROM }}
           cache-to: ${{ env.DOCKER_CACHE_TO }}
           build-contexts: |
             php:cli=docker-image://ghcr.io/benzine-framework/php:cli-8.2
             php:nginx=docker-image://ghcr.io/benzine-framework/php:nginx-8.2
 
-      - name: "Build: Build & Push Report Image"
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          target: connect-reporter
-          platforms: ${{ github.actor != 'nektos/act' && env.PLATFORMS || 'linux/amd64' }}
-          pull: true
-          push: ${{ github.ref == 'refs/heads/main' }}
-          tags: |
-            benzine/swarm-connectivity-tester:reporter
-            ghcr.io/benzine-framework/swarm-connectivity-tester:reporter
-          cache-from: ${{ env.DOCKER_CACHE_FROM }}
-          cache-to: ${{ env.DOCKER_CACHE_TO }}
-          build-contexts: |
-            php:cli=docker-image://ghcr.io/benzine-framework/php:cli-8.2
-            php:nginx=docker-image://ghcr.io/benzine-framework/php:nginx-8.2
