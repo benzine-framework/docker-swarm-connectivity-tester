@@ -51,6 +51,6 @@ jobs:
           cache-from: ${{ env.DOCKER_CACHE_FROM }}
           cache-to: ${{ env.DOCKER_CACHE_TO }}
           build-contexts: |
-            php:cli=docker-image://ghcr.io/benzine-framework/php:cli-8.2
-            php:nginx=docker-image://ghcr.io/benzine-framework/php:nginx-8.2
+            php:cli=docker-image://ghcr.io/benzine-framework/php:cli-${{ env.PHP_VERSION }}
+            php:nginx=docker-image://ghcr.io/benzine-framework/php:nginx-${{ env.PHP_VERSION }}
 
