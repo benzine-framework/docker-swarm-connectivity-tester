@@ -21,13 +21,13 @@ lint:
     - trufflehog # Trufflehog duplicates gitleaks functionality.
     - terrascan
     - trivy
+    - git-diff-check
   enabled:
     - gitleaks@8.18.2
     - markdownlint@0.40.0
     - taplo@0.8.1
     - actionlint@1.7.0
     - checkov@3.2.92
-    - git-diff-check
     - prettier@3.2.5
     - yamllint@1.35.1
   definitions:
